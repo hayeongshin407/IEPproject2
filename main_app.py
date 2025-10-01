@@ -1,5 +1,8 @@
 import streamlit as st
+import os
+import json
 
+# 메인 페이지를 표시하는 함수
 def show_main_page():
     st.title("🤖 AI 기반 IEP 시스템")
     st.markdown("---")
@@ -12,20 +15,39 @@ def show_main_page():
     st.markdown("---")
     st.markdown("<p style='text-align: center; color: grey;'>각 버튼을 클릭하면 해당 웹앱으로 이동합니다.</p>", unsafe_allow_html=True)
 
+# 환경 변수를 사용하도록 수정한 사용자 확인 함수
 def check_user(org, name):
-    for user_info in st.secrets.get("approved_users", {}).values():
+    # 환경 변수에서 APPROVED_USERS_JSON 값을 가져옵니다.
+    users_json_string = os.environ.get("APPROVED_USERS_JSON")
+    if not users_json_string:
+        return False
+
+    # JSON 문자열을 파이썬 딕셔너리로 변환합니다.
+    try:
+        approved_users = json.loads(users_json_string)
+    except json.JSONDecodeError:
+        # JSON 형식이 잘못되었을 경우를 대비
+        st.error("관리자: 환경 변수의 사용자 정보 형식이 잘못되었습니다.")
+        return False
+
+    # 입력된 정보와 저장된 정보를 비교합니다.
+    for user_info in approved_users.values():
         if user_info.get("org", "").strip() == org.strip() and user_info.get("name", "").strip() == name.strip():
             return True
     return False
 
+# --- 사용자 승인 상태 관리 ---
 if "is_approved" not in st.session_state:
     st.session_state.is_approved = False
 
+# 승인 상태에 따라 페이지 설정을 다르게 합니다.
 if not st.session_state.is_approved:
     st.set_page_config(page_title="사용자 확인", page_icon="🔒", layout="centered")
 else:
     st.set_page_config(page_title="AI 기반 IEP 시스템", page_icon="🏠", layout="centered")
 
+
+# --- 메인 로직 ---
 if st.session_state.is_approved:
     show_main_page()
 else:
