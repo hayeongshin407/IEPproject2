@@ -1,4 +1,3 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/pages/1_iep_meeting.py b/pages/1_iep_meeting.py
 index e5cc027de9dc2deaf00dec3a46bacacd88987a74..e08beca52486942cb2d6fd15cefa9536c10066ff 100644
 --- a/pages/1_iep_meeting.py
@@ -589,3 +588,4 @@ index e5cc027de9dc2deaf00dec3a46bacacd88987a74..e08beca52486942cb2d6fd15cefa9536
  
 EOF
 )
+
