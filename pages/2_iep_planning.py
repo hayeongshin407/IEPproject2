@@ -11,8 +11,6 @@ import io
 import re
 
 # API 키 보안 설정
-# 페이지를 직접 실행할 경우 secrets.toml에서 키를 로드 시도
-# 메인 앱에서 실행될 경우 st.session_state에 저장된 키를 사용
 if 'user_api_key' in st.session_state and st.session_state.user_api_key:
     genai.configure(api_key=st.session_state.user_api_key)
 else:
@@ -22,9 +20,7 @@ else:
         st.error("Gemini API 키가 설정되지 않았습니다.")
         st.stop()
 
-# 유효한 모델 이름으로 설정
 model = genai.GenerativeModel('gemini-2.0-flash')
-
 
 st.set_page_config(
     page_title="개별화교육계획 수립",
@@ -653,12 +649,14 @@ with tabs[6]:
                     plan_table.rows[0].cells[i].text = header
                     plan_table.rows[0].cells[i].paragraphs[0].runs[0].font.bold = True
                 
-                for month_plan in plan_data:
-                    row_cells[0].text = month_plan['교과(영역)']
-                    row_cells[1].text = month_plan['장기 교육 목표 및 수립 근거']
-                    row_cells[2].text = month_plan['교육 내용']
-                    row_cells[3].text = month_plan['교육 방법']
-                    row_cells[4].text = month_plan['평가 계획']
+                # ✅ 수정된 부분: 변수명 mp로 변경하여 충돌 방지
+                for mp in plan_data:
+                    row_cells = plan_table.add_row().cells
+                    row_cells[0].text = mp['교과(영역)']
+                    row_cells[1].text = mp['장기 교육 목표 및 수립 근거']
+                    row_cells[2].text = mp['교육 내용']
+                    row_cells[3].text = mp['교육 방법']
+                    row_cells[4].text = mp['평가 계획']
                 
                 file_stream = io.BytesIO(); document.save(file_stream); file_stream.seek(0)
                 st.success("✅ IEP 문서 생성이 완료되었습니다.")
