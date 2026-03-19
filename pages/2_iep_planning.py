@@ -654,9 +654,8 @@ with tabs[6]:
                     plan_table.rows[0].cells[i].paragraphs[0].runs[0].font.bold = True
                 
                 for month_plan in plan_data:
-                    row_cells = plan_table.add_row().cells
                     row_cells[0].text = month_plan['교과(영역)']
-                    row_cells[1].text = month_plan['교육 목표']
+                    row_cells[1].text = month_plan['장기 교육 목표 및 수립 근거']
                     row_cells[2].text = month_plan['교육 내용']
                     row_cells[3].text = month_plan['교육 방법']
                     row_cells[4].text = month_plan['평가 계획']
