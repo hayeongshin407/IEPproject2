@@ -24,7 +24,7 @@ else:
         st.error("Gemini API 키가 설정되지 않았음. 환경 변수나 사이드바 설정을 확인해야 함.")
         st.stop()
 
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-3.5-flash')
 
 st.set_page_config(
     page_title="AI 기반 개별화교육평가",
